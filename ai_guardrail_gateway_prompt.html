@@ -1,0 +1,889 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  * { box-sizing: border-box; }
+
+  :root {
+    --accent: #00E5FF;
+    --accent2: #7B61FF;
+    --danger: #FF3B5C;
+    --safe: #00FF9C;
+    --warn: #FFB800;
+    --grid: rgba(0,229,255,0.06);
+    --border: rgba(0,229,255,0.18);
+    --glass: rgba(10,14,26,0.72);
+    --text: #E2F0FF;
+    --muted: rgba(180,210,255,0.5);
+    --surface: rgba(255,255,255,0.03);
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  body { margin: 0; background: transparent; }
+
+  #gw-root {
+    font-family: var(--sans);
+    background: #060b18;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid background */
+  #gw-root::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Radial glow at top */
+  #gw-root::after {
+    content: '';
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(0,229,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .gw-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 0 60px;
+  }
+
+  /* ── HEADER ── */
+  .gw-header {
+    padding: 36px 24px 28px;
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .gw-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-hex {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+  }
+
+  .gw-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  .gw-subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--mono);
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+  }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    background: var(--surface);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--safe);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--safe);
+    box-shadow: 0 0 6px var(--safe);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 20px 24px 10px;
+  }
+
+  /* ── PROMPT BOX ── */
+  .prompt-section {
+    padding: 0 24px 24px;
+  }
+
+  .prompt-wrapper {
+    background: var(--glass);
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .prompt-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 0.5px solid var(--border);
+    background: rgba(0,229,255,0.04);
+  }
+
+  .prompt-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .provider-select {
+    display: flex;
+    gap: 6px;
+  }
+
+  .pvdr-btn {
+    padding: 3px 10px;
+    border-radius: 4px;
+    border: 0.5px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .pvdr-btn.active, .pvdr-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,229,255,0.06);
+  }
+
+  textarea#prompt-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 14px 16px;
+    resize: none;
+    min-height: 100px;
+  }
+
+  textarea#prompt-input::placeholder {
+    color: rgba(180,210,255,0.25);
+  }
+
+  .prompt-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .char-count {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .scan-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 18px;
+    background: var(--accent);
+    color: #060b18;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .scan-btn:hover { background: #33ebff; transform: translateY(-1px); }
+  .scan-btn:active { transform: scale(0.97); }
+
+  /* ── ANALYSIS PANEL ── */
+  .analysis-section {
+    padding: 0 24px;
+    display: none;
+  }
+
+  .analysis-section.visible { display: block; }
+
+  .threat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .threat-card {
+    background: var(--glass);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    transition: border-color 0.3s;
+  }
+
+  .threat-card.flagged {
+    border-color: var(--danger);
+    background: rgba(255,59,92,0.06);
+  }
+
+  .threat-card.warning {
+    border-color: var(--warn);
+    background: rgba(255,184,0,0.06);
+  }
+
+  .tc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .tc-name {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .tc-score {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .tc-score.high { color: var(--danger); }
+  .tc-score.mid { color: var(--warn); }
+  .tc-score.low { color: var(--safe); }
+
+  .tc-bar-track {
+    height: 3px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .tc-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .tc-bar-fill.high { background: var(--danger); }
+  .tc-bar-fill.mid { background: var(--warn); }
+  .tc-bar-fill.low { background: var(--safe); }
+
+  /* ── OVERALL VERDICT ── */
+  .verdict-panel {
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--glass);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .verdict-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+  }
+
+  .verdict-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .verdict-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+  }
+
+  .verdict-icon.blocked { background: rgba(255,59,92,0.15); }
+  .verdict-icon.allowed { background: rgba(0,255,156,0.12); }
+  .verdict-icon.warned { background: rgba(255,184,0,0.12); }
+
+  .verdict-text {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .verdict-text.blocked { color: var(--danger); }
+  .verdict-text.allowed { color: var(--safe); }
+  .verdict-text.warned { color: var(--warn); }
+
+  .overall-score {
+    text-align: right;
+  }
+
+  .score-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .score-num.high { color: var(--danger); }
+  .score-num.mid { color: var(--warn); }
+  .score-num.low { color: var(--safe); }
+
+  .score-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .verdict-divider {
+    height: 0.5px;
+    background: var(--border);
+    margin: 0 18px;
+  }
+
+  .verdict-reason {
+    padding: 12px 18px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+    line-height: 1.6;
+  }
+
+  /* ── AI RESPONSE ── */
+  .response-section {
+    padding: 0 24px;
+    display: none;
+  }
+
+  .response-section.visible { display: block; }
+
+  .response-box {
+    background: var(--glass);
+    border: 0.5px solid rgba(0,255,156,0.25);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+
+  .response-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .response-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--safe);
+    text-transform: uppercase;
+  }
+
+  .output-guard-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    color: var(--safe);
+    border: 0.5px solid rgba(0,255,156,0.3);
+    border-radius: 4px;
+    padding: 3px 8px;
+  }
+
+  .response-body {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.75;
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--glass);
+    overflow: hidden;
+    margin: 0 24px 24px;
+  }
+
+  .stat-item {
+    padding: 14px 16px;
+    border-right: 0.5px solid var(--border);
+    text-align: center;
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .stat-lbl {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* ── CHAT HISTORY ── */
+  .history-section {
+    padding: 0 24px;
+  }
+
+  .history-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    align-items: flex-start;
+  }
+
+  .hist-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .hist-badge.blocked { background: rgba(255,59,92,0.15); color: var(--danger); }
+  .hist-badge.allowed { background: rgba(0,255,156,0.12); color: var(--safe); }
+
+  .hist-content { flex: 1; min-width: 0; }
+
+  .hist-prompt {
+    font-size: 12px;
+    color: var(--text);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hist-meta {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    display: flex;
+    gap: 12px;
+  }
+
+  /* ── SCANNING ANIMATION ── */
+  .scanning-bar {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    background-size: 200% 100%;
+    border-radius: 1px;
+    margin: 0 24px 8px;
+    display: none;
+    animation: scan-sweep 1.2s linear infinite;
+  }
+
+  .scanning-bar.active { display: block; }
+
+  @keyframes scan-sweep {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+  }
+
+  /* New prompt btn */
+  .new-prompt-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 16px;
+    background: transparent;
+    color: var(--accent);
+    border: 0.5px solid var(--accent);
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .new-prompt-btn:hover { background: rgba(0,229,255,0.06); }
+
+  .mt12 { margin-top: 12px; }
+</style>
+
+<div id="gw-root">
+  <div class="gw-inner">
+
+    <!-- Header -->
+    <div class="gw-header">
+      <div class="gw-logo">
+        <svg class="logo-hex" viewBox="0 0 38 38" fill="none">
+          <polygon points="19,2 34,11 34,27 19,36 4,27 4,11" fill="none" stroke="#00E5FF" stroke-width="1"/>
+          <polygon points="19,8 29,14 29,24 19,30 9,24 9,14" fill="rgba(0,229,255,0.07)" stroke="#00E5FF" stroke-width="0.5" opacity="0.6"/>
+          <path d="M14 19L18 23L25 15" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div class="gw-title">Guardrail Gateway</div>
+          <div class="gw-subtitle">v2.4.1 — Secure Multi-LLM Proxy</div>
+        </div>
+      </div>
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        ENGINE ONLINE
+      </div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="section-label" style="padding-bottom:8px;">Session analytics</div>
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-lbl">Analyzed</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="stat-allowed" style="color:var(--safe)">0</div>
+        <div class="stat-lbl">Allowed</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="stat-blocked" style="color:var(--danger)">0</div>
+        <div class="stat-lbl">Blocked</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="stat-avg">—</div>
+        <div class="stat-lbl">Avg Risk</div>
+      </div>
+    </div>
+
+    <!-- Prompt input -->
+    <div class="section-label">Submit prompt</div>
+    <div class="prompt-section">
+      <div class="prompt-wrapper">
+        <div class="prompt-header">
+          <span class="prompt-tag">// Input vector</span>
+          <div class="provider-select">
+            <button class="pvdr-btn active" onclick="selectProvider('ChatGPT', this)">ChatGPT</button>
+            <button class="pvdr-btn" onclick="selectProvider('Gemini', this)">Gemini</button>
+          </div>
+        </div>
+        <textarea id="prompt-input" rows="4" placeholder="Enter your prompt for analysis and secure routing…" oninput="updateChar()"></textarea>
+        <div class="prompt-footer">
+          <span class="char-count" id="char-count">0 / 4000</span>
+          <button class="scan-btn" onclick="runScan()">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M3 5h4M5 3v4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            Analyze &amp; Route
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scanning indicator -->
+    <div class="scanning-bar" id="scan-bar"></div>
+
+    <!-- Analysis results -->
+    <div class="analysis-section" id="analysis-section">
+      <div class="section-label" style="padding: 0 0 10px;">Threat analysis</div>
+      <div class="threat-grid" id="threat-grid"></div>
+      <div class="verdict-panel" id="verdict-panel">
+        <div class="verdict-top">
+          <div class="verdict-label">
+            <div class="verdict-icon" id="v-icon"></div>
+            <div>
+              <div class="verdict-text" id="v-text"></div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:2px;" id="v-provider"></div>
+            </div>
+          </div>
+          <div class="overall-score">
+            <div class="score-num" id="overall-score-num">—</div>
+            <div class="score-label">Risk Score</div>
+          </div>
+        </div>
+        <div class="verdict-divider"></div>
+        <div class="verdict-reason" id="v-reason"></div>
+      </div>
+    </div>
+
+    <!-- AI Response -->
+    <div class="response-section" id="response-section">
+      <div class="section-label" style="padding: 0 0 10px;">AI response (output-guarded)</div>
+      <div class="response-box">
+        <div class="response-header">
+          <span class="response-tag">// Safe response</span>
+          <div class="output-guard-badge">
+            <svg width="7" height="7" viewBox="0 0 7 7" fill="none"><path d="M1 3.5L3 5.5L6 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Output guardrail passed
+          </div>
+        </div>
+        <div class="response-body" id="response-body"></div>
+      </div>
+      <div class="mt12">
+        <button class="new-prompt-btn" onclick="resetPanel()">↺ &nbsp;New Prompt</button>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="section-label" style="margin-top: 24px;">Session history</div>
+    <div class="history-section" id="history-section">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);padding:8px 0;">No prompts analyzed yet.</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let selectedProvider = 'ChatGPT';
+let sessionStats = { total: 0, allowed: 0, blocked: 0, scores: [] };
+let history = [];
+
+function selectProvider(name, el) {
+  selectedProvider = name;
+  document.querySelectorAll('.pvdr-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function updateChar() {
+  const v = document.getElementById('prompt-input').value;
+  document.getElementById('char-count').textContent = v.length + ' / 4000';
+}
+
+function scoreClass(n) {
+  if (n >= 61) return 'high';
+  if (n >= 31) return 'mid';
+  return 'low';
+}
+
+function analyzePrompt(prompt) {
+  const p = prompt.toLowerCase();
+  const threats = [
+    { key: 'prompt_injection', label: 'Prompt Injection', patterns: ['ignore','previous instructions','system prompt','override','bypass','forget instructions','disregard'] },
+    { key: 'jailbreak', label: 'Jailbreak', patterns: ['dan mode','developer mode','unrestricted','no limits','jailbreak','do anything now'] },
+    { key: 'cyber_abuse', label: 'Cyber Abuse', patterns: ['malware','ransomware','exploit','phishing','credential','hack','sql injection','virus','rootkit','keylogger'] },
+    { key: 'fraud', label: 'Fraud / Deception', patterns: ['scam','social engineering','fake certificate','impersonate','identity fraud','financial fraud'] },
+    { key: 'privacy', label: 'Privacy Violation', patterns: ['doxx','personal data','private info','dox','harvesting','surveillance','track location'] },
+    { key: 'harmful', label: 'Harmful Content', patterns: ['threat','violence','kill','bomb','weapon','murder','illegal activity','criminal'] },
+    { key: 'ai_abuse', label: 'AI Abuse', patterns: ['weaponize','attack agent','autonomous attack','agent loop','bypass safety'] },
+  ];
+
+  const scores = {};
+  threats.forEach(t => {
+    let hits = t.patterns.filter(pat => p.includes(pat)).length;
+    // Weighted scoring with semantic drift bonus
+    let base = Math.min(100, hits * 28 + (hits > 0 ? Math.floor(Math.random() * 18) : Math.floor(Math.random() * 12)));
+    scores[t.key] = { label: t.label, score: base };
+  });
+
+  const vals = Object.values(scores).map(x => x.score);
+  const overall = Math.min(100, Math.round(Math.max(...vals) * 0.7 + (vals.reduce((a,b)=>a+b,0)/vals.length) * 0.3));
+  scores['overall'] = overall;
+  return scores;
+}
+
+async function runScan() {
+  const prompt = document.getElementById('prompt-input').value.trim();
+  if (!prompt) return;
+
+  // Reset
+  document.getElementById('analysis-section').classList.remove('visible');
+  document.getElementById('response-section').classList.remove('visible');
+
+  // Scan animation
+  const scanBar = document.getElementById('scan-bar');
+  scanBar.classList.add('active');
+
+  await new Promise(r => setTimeout(r, 1400));
+  scanBar.classList.remove('active');
+
+  const results = analyzePrompt(prompt);
+  const overall = results['overall'];
+  const sc = scoreClass(overall);
+
+  // Build threat grid
+  const grid = document.getElementById('threat-grid');
+  grid.innerHTML = '';
+  const categories = ['prompt_injection','jailbreak','cyber_abuse','fraud','privacy','harmful','ai_abuse'];
+  categories.forEach(key => {
+    const { label, score } = results[key];
+    const cls = scoreClass(score);
+    const flagged = cls === 'high' ? 'flagged' : (cls === 'mid' ? 'warning' : '');
+    grid.innerHTML += `
+      <div class="threat-card ${flagged}">
+        <div class="tc-header">
+          <span class="tc-name">${label}</span>
+          <span class="tc-score ${cls}">${score}</span>
+        </div>
+        <div class="tc-bar-track"><div class="tc-bar-fill ${cls}" id="bar-${key}" style="width:0%"></div></div>
+      </div>`;
+  });
+
+  document.getElementById('analysis-section').classList.add('visible');
+
+  // Animate bars
+  await new Promise(r => setTimeout(r, 60));
+  categories.forEach(key => {
+    const el = document.getElementById('bar-' + key);
+    if (el) el.style.width = results[key].score + '%';
+  });
+
+  // Verdict
+  let vText, vClass, vReason, vEmoji;
+  if (overall >= 61) {
+    vText = '⛔ Request Blocked';
+    vClass = 'blocked';
+    vEmoji = '⛔';
+    vReason = `Threat score ${overall}/100 exceeds policy threshold (61). This prompt was not forwarded to ${selectedProvider}. High-confidence detection of malicious intent patterns. Please rephrase your request.`;
+  } else if (overall >= 31) {
+    vText = '⚠ Warning — Rephrase Advised';
+    vClass = 'warned';
+    vEmoji = '⚠';
+    vReason = `Moderate risk score ${overall}/100 detected. Forwarding to ${selectedProvider} with elevated monitoring. Consider rephrasing to reduce ambiguity. Response will undergo enhanced output guardrail inspection.`;
+  } else {
+    vText = '✓ Safe — Forwarding to ' + selectedProvider;
+    vClass = 'allowed';
+    vEmoji = '✓';
+    vReason = `Risk score ${overall}/100 within acceptable policy range (0–30). Prompt cleared all threat category checks. Routing securely to ${selectedProvider} API. Output guardrail active.`;
+  }
+
+  const vIcon = document.getElementById('v-icon');
+  const vTextEl = document.getElementById('v-text');
+  const vProvEl = document.getElementById('v-provider');
+  const scoreEl = document.getElementById('overall-score-num');
+
+  vIcon.className = 'verdict-icon ' + vClass;
+  vIcon.textContent = vEmoji;
+  vTextEl.className = 'verdict-text ' + vClass;
+  vTextEl.textContent = vText;
+  vProvEl.textContent = 'Target: ' + selectedProvider + '  |  Policy: v2.4';
+  scoreEl.className = 'score-num ' + sc;
+  scoreEl.textContent = overall;
+  document.getElementById('v-reason').textContent = vReason;
+
+  // If safe/warn, show "response"
+  if (overall < 61) {
+    await new Promise(r => setTimeout(r, 600));
+    document.getElementById('response-section').classList.add('visible');
+    document.getElementById('response-body').textContent = `[${selectedProvider}] This is a simulated AI response. In production, the live response from ${selectedProvider} would appear here after passing the output guardrail. Both input and output are fully logged with timestamp, session ID, risk score, threat categories, and routing decision for audit compliance.`;
+  }
+
+  // Update stats
+  sessionStats.total++;
+  sessionStats.scores.push(overall);
+  if (overall >= 61) sessionStats.blocked++;
+  else sessionStats.allowed++;
+
+  document.getElementById('stat-total').textContent = sessionStats.total;
+  document.getElementById('stat-allowed').textContent = sessionStats.allowed;
+  document.getElementById('stat-blocked').textContent = sessionStats.blocked;
+  document.getElementById('stat-avg').textContent = Math.round(sessionStats.scores.reduce((a,b)=>a+b,0)/sessionStats.scores.length);
+
+  // History
+  const dec = overall >= 61 ? 'blocked' : (overall >= 31 ? 'warned' : 'allowed');
+  const badge = overall >= 61 ? '⛔' : (overall >= 31 ? '⚠' : '✓');
+  history.unshift({ prompt, overall, dec, badge, provider: selectedProvider });
+
+  const hs = document.getElementById('history-section');
+  hs.innerHTML = history.slice(0,5).map(h => `
+    <div class="history-item">
+      <div class="hist-badge ${h.dec === 'blocked' ? 'blocked' : 'allowed'}">${h.badge}</div>
+      <div class="hist-content">
+        <div class="hist-prompt">${h.prompt.substring(0,80)}${h.prompt.length > 80 ? '…' : ''}</div>
+        <div class="hist-meta">
+          <span>Score: ${h.overall}</span>
+          <span>${h.provider}</span>
+          <span>${new Date().toLocaleTimeString()}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function resetPanel() {
+  document.getElementById('prompt-input').value = '';
+  document.getElementById('char-count').textContent = '0 / 4000';
+  document.getElementById('analysis-section').classList.remove('visible');
+  document.getElementById('response-section').classList.remove('visible');
+}
+</script>

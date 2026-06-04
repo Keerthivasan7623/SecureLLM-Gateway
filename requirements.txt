@@ -1,0 +1,7 @@
+Flask
+qrcode
+sentence-transformers
+faiss-cpu
+requests
+openai
+google-generativeai
