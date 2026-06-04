@@ -1,4 +1,4 @@
-# 🛡️ SentinelAI Guardrail Gateway
+# 🛡️ SecureLLM Gateway
 
 ![Version](https://img.shields.io/badge/version-2.4-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
@@ -10,7 +10,7 @@ A hardened, enterprise-grade Secure Multi-LLM Proxy that intercepts, classifies,
 
 ## 🌟 Overview
 
-SentinelAI Guardrail implements a **Three-Tier Zero-Trust Architecture**. It acts as a security operations gateway rather than just a chatbot wrapper. By utilizing local zero-shot classification machine learning models, it intercepts prompts in real-time, calculates threat probabilities, and automatically blocks adversarial attacks without relying solely on the upstream LLM providers.
+SecureLLM Gateway implements a **Three-Tier Zero-Trust Architecture**. It acts as a security operations gateway rather than just a chatbot wrapper. By utilizing local zero-shot classification machine learning models, it intercepts prompts in real-time, calculates threat probabilities, and automatically blocks adversarial attacks without relying solely on the upstream LLM providers.
 
 ## 🚀 Key Features & Topics Covered
 
@@ -80,7 +80,7 @@ npm run dev
 ```
 
 ### 3. Usage
-Navigate to `http://localhost:3000` in your browser. You will be presented with the SentinelAI dashboard where you can simulate prompts and monitor the threat detection engine in real-time.
+Navigate to `http://localhost:3000` in your browser. You will be presented with the SecureLLM Gateway dashboard where you can simulate prompts and monitor the threat detection engine in real-time.
 
 ## 🤝 Contributing
 Contributions, issues, and feature requests are welcome! Feel free to check the issues page.

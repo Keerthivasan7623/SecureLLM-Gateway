@@ -136,7 +136,7 @@ export default function GuardrailGateway() {
         <div className="flex items-center gap-3">
           <Shield className="text-emerald-500 w-6 h-6" />
           <h1 className="font-semibold text-lg tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            AI Guardrail Gateway <span className="text-xs text-emerald-500 font-mono ml-2 border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 rounded-full">v2.4</span>
+            SecureLLM Gateway <span className="text-xs text-emerald-500 font-mono ml-2 border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 rounded-full">v2.4</span>
           </h1>
         </div>
         <button 
@@ -322,7 +322,7 @@ export default function GuardrailGateway() {
               </button>
             </div>
             <div className="text-center mt-2 text-[10px] text-gray-500">
-              Secured by AI Guardrail Gateway v2.4 • Zero-Trust Engine Active
+              Secured by SecureLLM Gateway v2.4 • Zero-Trust Engine Active
             </div>
           </div>
 
